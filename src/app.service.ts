@@ -11,13 +11,13 @@ import { client } from './@core/config/db';
 
 @Injectable()
 export class AppService {
-  getPost = async (event) => {
+  getPost = async (payload) => {
     const response: any = { statusCode: 200 };
 
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: event.pathParameters.postId }),
+        Key: marshall({ postId: payload.pathParameters.postId }),
       };
       const { Item } = await client.send(new GetItemCommand(params));
 
@@ -40,11 +40,11 @@ export class AppService {
     return response;
   };
 
-  createPost = async (event) => {
+  createPost = async (payload) => {
     const response: any = { statusCode: 200 };
 
     try {
-      const body = JSON.parse(event.body);
+      const body = payload;
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
         Item: marshall(body || {}),
@@ -68,15 +68,15 @@ export class AppService {
     return response;
   };
 
-  updatePost = async (event) => {
+  updatePost = async (payload) => {
     const response: any = { statusCode: 200 };
 
     try {
-      const body = JSON.parse(event.body);
+      const body = JSON.parse(payload.body);
       const objKeys = Object.keys(body);
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: event.pathParameters.postId }),
+        Key: marshall({ postId: payload.pathParameters.postId }),
         UpdateExpression: `SET ${objKeys
           .map((_, index) => `#key${index} = :value${index}`)
           .join(', ')}`,
@@ -116,13 +116,13 @@ export class AppService {
     return response;
   };
 
-  deletePost = async (event) => {
+  deletePost = async (payload) => {
     const response: any = { statusCode: 200 };
 
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: event.pathParameters.postId }),
+        Key: marshall({ postId: payload.pathParameters.postId }),
       };
       const deleteResult = await client.send(new DeleteItemCommand(params));
 
