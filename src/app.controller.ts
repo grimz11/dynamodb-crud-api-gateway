@@ -13,9 +13,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  async getPost(@Param() postId: any): Promise<any> {
-    return await this.appService.getPost(postId);
+  @Get(':postId')
+  async getPost(@Param() params: any): Promise<any> {
+    return await this.appService.getPost(params.postId);
   }
 
   @Get()
@@ -28,13 +28,13 @@ export class AppController {
     return await this.appService.createPost(body);
   }
 
-  @Put()
-  async updatePost(@Param('id') id: string): Promise<any> {
-    return await this.appService.updatePost(id);
+  @Put(':postId')
+  async updatePost(@Param() params: any): Promise<any> {
+    return await this.appService.updatePost(params.postId);
   }
 
-  @Delete()
-  async deletePost(@Param('id') id: string): Promise<any> {
-    return await this.appService.deletePost(id);
+  @Delete(':postId')
+  async deletePost(@Param() params: any): Promise<any> {
+    return await this.appService.deletePost(params.postId);
   }
 }

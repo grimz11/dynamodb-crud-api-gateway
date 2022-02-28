@@ -21,7 +21,6 @@ export class AppService {
       };
       const { Item } = await client.send(new GetItemCommand(params));
 
-      console.log({ Item });
       response.body = JSON.stringify({
         message: 'Successfully retrieved post.',
         data: Item ? unmarshall(Item) : {},
@@ -72,11 +71,11 @@ export class AppService {
     const response: any = { statusCode: 200 };
 
     try {
-      const body = JSON.parse(payload.body);
+      const body = payload;
       const objKeys = Object.keys(body);
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: payload.pathParameters.postId }),
+        Key: marshall({ postId: payload }),
         UpdateExpression: `SET ${objKeys
           .map((_, index) => `#key${index} = :value${index}`)
           .join(', ')}`,
@@ -122,7 +121,7 @@ export class AppService {
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: payload.pathParameters.postId }),
+        Key: marshall({ postId: payload }),
       };
       const deleteResult = await client.send(new DeleteItemCommand(params));
 
