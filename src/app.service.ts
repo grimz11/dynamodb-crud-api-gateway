@@ -17,7 +17,7 @@ export class AppService {
     try {
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
-        Key: marshall({ postId: payload.pathParameters.postId }),
+        Key: marshall({ postId: payload }),
       };
       const { Item } = await client.send(new GetItemCommand(params));
 

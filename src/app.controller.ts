@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('user')
+@Controller('post')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  async getPost(@Body() body: any): Promise<any> {
-    return await this.appService.getPost(body);
+  async getPost(@Param() postId: any): Promise<any> {
+    return await this.appService.getPost(postId);
   }
 
   @Get()
